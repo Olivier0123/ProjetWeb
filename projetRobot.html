@@ -22,37 +22,21 @@
 </body>
 <script type="text/javascript">
   // -------------------------------------------------------
-  // Méthodes de l'objet Grille
+  // Méthodes de l'objet Grille  
+
   var canva= document.getElementById('mon_canvas');
   var ctx= canva.getContext( '2d');
   var nbX=12;
-  var nbY=12;
-  
-  var nbC=nbX*nbY;
-  var nbCur=0;
-  var obj=[];
-  
-  var tab=[];
-  for (i=0;i<nbX;i++) {
-    var ligne=[];
-    for (j=0;j<nbY;j++) {
-	ligne.push(false);
-    }
-    tab.push(ligne);
-}
-			
+  varnbY=12;
 
-
-					  
-					  
   
-			
 			
   // -------------------------------------------------------
   // Méthodes de l'objet
   // -------------------------------------------------------
   // scène globale
   var gr = new Grille(12,12,'mon_canvas');
+  dessinGrille(12,12,'mon_convas');
   var rbt1 = new Robot(4,4,0.1,'black');
   var rbt2 = new Robot(11,11,0.03,'red');
   var rbt3 = new Robot(5,10,0.05,'blue');
