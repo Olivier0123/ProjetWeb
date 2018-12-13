@@ -23,17 +23,166 @@
 <script type="text/javascript">
   // -------------------------------------------------------
   // Méthodes de l'objet Grille  
-  var canva= document.getElementById('mon_canvas');
-  var ctx= canva.getContext( '2d');
-  var nbX=12;
-  var nbY=12;
+	function Grille(nbX,nbY,mon_canvas) {
+		this.canva=document.getElementById(mon_canvas);
+   		this.ctx= this.canva.getContext('2d');
+    	this.tab=[];
+    	this.obj=[];
+    	this.nbX=nbX;
+    	this.nbY=nbY;
+    	this.nbC=this.nbX*this.nbY;
+    	this.nbCur=0;
+
+    	for(i=0;i<nbX;i++){
+
+			this.ligne=[];
+
+			for(j=0;j<nbY;j++){
+
+	  	  		this.ligne.push(false);
+			}	
+
+			this.tab.push(this.ligne);
+    	}
+
+    	this.dX= 350/this.nbX;
+    	this.dY=350/this.nbY;
+
+	}
+
+	Grille.prototype.dessinGrille = function(){
+    
+    	for(i=1;i<this.nbY;i++){
+			this.ctx.moveTo(i*this.dY,0);
+			this.ctx.lineTo(i*this.dY,350);
+			this.ctx.stroke();
+    	}
+    
+    	for(j=1;j<this.nbX;j++)
+    	{
+			this.ctx.moveTo(0,j*this.dX);
+			this.ctx.lineTo(350,j*this.dX);
+			this.ctx.stroke();
+    	}
+    }
+
+    Grille.prototype.dessin = function(){
+
+    	gr.dessinGrille();
+    	rbt1.dessin(this.ctx,this.dX,this.dY);
+    	rbt2.dessin(this.ctx,this.dX,this.dY);
+    	rbt3.dessin(this.ctx,this.dX,this.dY);
+
+	}
+
+	Grille.prototype.ajoutObjet= function(objet){
+
+		this.obj.push(objet);
+		this.nbCur=this.nbCur+1;
+		this.tab[objet.posX][objet.posY]=true;
+
+
+	}
+
+
+	Grille.prototype.mvtAdmis = function(objet,dx,dy){
+
+		if(this.tab[objet.posX+objet.dx][objet.posY+objet.dy]==false)
+		{
+			return(true);
+		}
+
+
+		return(false);
+
+	}
+
+	Grille.prototype.majDessinObjet = function(objet){
+
+		
+
+
+	}
+
+	Grille.prototype.stopObjets = function() {}
   
   // -------------------------------------------------------
   // Méthodes de l'objet
+
+	function Robot(x,y,vitesse,couleur){
+
+		this.posX=x;
+		this.posY=y;
+		this.temps=vitesse;
+		this.couleur=couleur;
+		this.timeID=0;
+		this.eveille=false;
+
+	}
+
+	Robot.prototype.dessin= function(ctx,dx,dy){
+
+		ctx.beginPath();
+		ctx.lineWidth="2";
+		ctx.fillStyle=this.couleur;
+		ctx.arc(dy*this.posX+dx/2,dx*this.posY+dy/2,dx/2,0,2*Math.PI);
+		ctx.fill();
+
+	}
+
+	Robot.prototype.perception= function() {
+
+		var tabMvt=[]
+
+		if(mvtAdmis(objet,this.posX+1,this.posY)){
+
+			tabMvt=tabMvt.push([1,0]);
+
+		}
+		if(mvtAdmis(objet,this.posX-1,this.posY)){
+			tabMvt=tabMvt.push([-1,0]);
+		}
+
+		if(mvtAdmis(objet,this.posX,this.posY+1)){
+			tabMvt=tabMvt.push([0,1]);
+		}
+
+		if(mvtAdmis(objet,this.posX,this.posY-1)){
+			tabMvt=tabMvt.push([0,-1]);
+		}
+
+
+		setTimeout(this.reflexion.bind(this.tabMvt).temps);
+	}
+
+	Robot.prototype.reflexion= function(tabMvt){
+
+		var act=tabMvt[Math.random(tabMvt.length)];
+
+
+		setTimeout(this.action.bind(this.act).temps);
+	}
+
+
+	Robot.prototype.action= function(act){
+		gr.majDessinObjet(this.obj);
+
+	}
+
+	Robot.prototype.reveille= function(){
+		this.eveille=true;
+		rbt1.perception();
+		rbt2.perception();
+		rbt3.perception();
+
+
+	}
+
+
+
   // -------------------------------------------------------
   // scène globale
   var gr = new Grille(12,12,'mon_canvas');
-  new dessinGrille(12,12,'mon_convas');
   var rbt1 = new Robot(4,4,0.1,'black');
   var rbt2 = new Robot(11,11,0.03,'red');
   var rbt3 = new Robot(5,10,0.05,'blue');
@@ -42,7 +191,10 @@
   gr.ajoutObjet(rbt3);
   gr.dessin();
   //rbt1.reveille();
+
+
   //rbt2.reveille();
   //rbt3.reveille();
+
 </script>
 </html>
