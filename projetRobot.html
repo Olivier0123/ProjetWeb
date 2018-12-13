@@ -27,25 +27,27 @@
   var ctx= canva.getContext( '2d');
   var nbX=12;
   var nbY=12;
-  function Grille(nbX,nbY,mon_canvas) {
   
-  var dX= 350/nbX;
-  var dY=350/nbY;
+  var nbC=nbX*nbY;
+  var nbCur=0;
+  var obj=[];
   
-  for(i=1;i<nbY;i++){
-	     ctx.moveTo(i*dY,0);
-	     ctx.lineTo(i*dY,350);
-	     ctx.stroke();
-	     }
-	     
-	     for(i=1;i<nbX;i++)
-			{
-			ctx.moveTo(0,i*dX);
-			ctx.lineTo(350,i*dX);
-			ctx.stroke();
-			}
-			}
- 
+  var tab=[];
+  for (i=0;i<nbX;i++) {
+    var ligne=[];
+    for (j=0;j<nbY;j++) {
+	ligne.push(false);
+    }
+    tab.push(ligne);
+}
+			
+
+
+					  
+					  
+  
+			
+			
   // -------------------------------------------------------
   // Méthodes de l'objet
   // -------------------------------------------------------
