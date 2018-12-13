@@ -23,35 +23,31 @@
 <script type="text/javascript">
   // -------------------------------------------------------
   // Méthodes de l'objet Grille
-
   var canva= document.getElementById('mon_canvas');
   var ctx= canva.getContext( '2d');
   var nbX=12;
   var nbY=12;
-  function dessinGrille(nbX,nbY,mon_canvas) {
-
+  function Grille(nbX,nbY,mon_canvas) {
   
   var dX= 350/nbX;
   var dY=350/nbY;
-  var tab=matrix(nbX,nbY);
   
   for(i=1;i<nbY;i++){
-			ctx.moveTo(i*dY,0);
-			ctx.lineTo(i*dY,350);
-			ctx.stroke();
+	     ctx.moveTo(i*dY,0);
+	     ctx.lineTo(i*dY,350);
+	     ctx.stroke();
 	     }
 	     
 	     for(i=1;i<nbX;i++)
-	     {
-	     ctx.moveTo(0,i*dX);
-	     ctx.lineTo(350,i*dX);
-	     ctx.stroke();
-	     }
+			{
+			ctx.moveTo(0,i*dX);
+			ctx.lineTo(350,i*dX);
+			ctx.stroke();
+			}
 			}
  
   // -------------------------------------------------------
   // Méthodes de l'objet
-
   // -------------------------------------------------------
   // scène globale
   var gr = new Grille(12,12,'mon_canvas');
