@@ -86,8 +86,18 @@
 
 
 	Grille.prototype.mvtAdmis = function(objet,dx,dy){
+		
+		if((objet.posX+dx)<0 | (objet.posX+dx)>11)
+		{
+			return(false);
+		}
 
-		if(this.tab[objet.posX+objet.dx][objet.posY+objet.dy]==false)
+		if((objet.posY+dy)<0 | (objet.posY+dy)>11)
+		{
+			return(false);
+		}
+
+		if(this.tab[objet.posX+dx][objet.posY+dy]==false)
 		{
 			return(true);
 		}
@@ -97,15 +107,31 @@
 
 	}
 
-	Grille.prototype.majDessinObjet = function(objet){
+	Grille.prototype.majDessinObjet = function(objet,dx,dy){
 
-		
-
+		objet.posX=objet.posX+dx;
+		objet.posY=objet.posY+dy;
+		objet.dessin(this.ctx,this.dX,this.dY);
 
 	}
 
-	Grille.prototype.stopObjets = function() {}
+	Grille.prototype.stopObjets = function() {
+
+		rbt1.eveille=false;
+		rbt1.eveille=false;
+		rbt1.eveille=false;
+	}
   
+
+
+
+
+
+
+
+
+
+
   // -------------------------------------------------------
   // Méthodes de l'objet
 
@@ -132,48 +158,52 @@
 
 	Robot.prototype.perception= function() {
 
-		var tabMvt=[]
+		var tabMvt=new Array();
 
-		if(mvtAdmis(objet,this.posX+1,this.posY)){
+		if(gr.mvtAdmis(this,1,0)){
 
-			tabMvt=tabMvt.push([1,0]);
+			tabMvt.push([1,0]);
 
 		}
-		if(mvtAdmis(objet,this.posX-1,this.posY)){
-			tabMvt=tabMvt.push([-1,0]);
+		if(gr.mvtAdmis(this,-1,0)){
+			tabMvt.push([-1,0]);
 		}
 
-		if(mvtAdmis(objet,this.posX,this.posY+1)){
-			tabMvt=tabMvt.push([0,1]);
+		if(gr.mvtAdmis(this,0,1)){
+			tabMvt.push([0,1]);
 		}
 
-		if(mvtAdmis(objet,this.posX,this.posY-1)){
-			tabMvt=tabMvt.push([0,-1]);
+		if(gr.mvtAdmis(this,0,-1)){
+			tabMvt.push([0,-1]);
 		}
 
+		//alert(tabMvt);
 
-		setTimeout(this.reflexion.bind(this.tabMvt).temps);
+		setTimeout(this.reflexion.bind(this,tabMvt),this.temps);
 	}
 
 	Robot.prototype.reflexion= function(tabMvt){
-
-		var act=tabMvt[Math.random(tabMvt.length)];
-
-
-		setTimeout(this.action.bind(this.act).temps);
+	
+		var act=tabMvt[Math.floor(Math.random()*tabMvt.length)];
+		//alert(act);
+		this.action(act);
 	}
 
 
 	Robot.prototype.action= function(act){
-		gr.majDessinObjet(this.obj);
+
+		gr.majDessinObjet(this,act[0],act[1]);
+
+		setTimeout(this.perception.bind(this),this.temps);
+
 
 	}
 
 	Robot.prototype.reveille= function(){
 		this.eveille=true;
-		rbt1.perception();
-		rbt2.perception();
-		rbt3.perception();
+
+		this.perception();
+
 
 
 	}
@@ -190,11 +220,9 @@
   gr.ajoutObjet(rbt2);
   gr.ajoutObjet(rbt3);
   gr.dessin();
-  //rbt1.reveille();
-
-
-  //rbt2.reveille();
-  //rbt3.reveille();
+  rbt1.reveille();
+  rbt2.reveille();
+  rbt3.reveille();
 
 </script>
 </html>
