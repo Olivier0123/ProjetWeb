@@ -32,24 +32,16 @@
     	this.nbY=nbY;
     	this.nbC=this.nbX*this.nbY;
     	this.nbCur=0;
-
     	for(i=0;i<nbX;i++){
-
 			this.ligne=[];
-
 			for(j=0;j<nbY;j++){
-
 	  	  		this.ligne.push(false);
 			}	
-
 			this.tab.push(this.ligne);
     	}
-
     	this.dX= 350/this.nbX;
     	this.dY=350/this.nbY;
-
 	}
-
 	Grille.prototype.dessinGrille = function(){
     
     	for(i=1;i<this.nbY;i++){
@@ -65,150 +57,95 @@
 			this.ctx.stroke();
     	}
     }
-
     Grille.prototype.dessin = function(){
-
     	gr.dessinGrille();
     	rbt1.dessin(this.ctx,this.dX,this.dY);
     	rbt2.dessin(this.ctx,this.dX,this.dY);
     	rbt3.dessin(this.ctx,this.dX,this.dY);
-
 	}
-
 	Grille.prototype.ajoutObjet= function(objet){
-
 		this.obj.push(objet);
 		this.nbCur=this.nbCur+1;
 		this.tab[objet.posX][objet.posY]=true;
-
-
 	}
-
-
 	Grille.prototype.mvtAdmis = function(objet,dx,dy){
 		
-		if((objet.posX+dx)<0 | (objet.posX+dx)>11)
+		if((objet.posX+dx)<0 | (objet.posX+dx)>this.nbX-1)
 		{
 			return(false);
 		}
-
-		if((objet.posY+dy)<0 | (objet.posY+dy)>11)
+		if((objet.posY+dy)<0 | (objet.posY+dy)>this.nbY-1)
 		{
 			return(false);
 		}
-
 		if(this.tab[objet.posX+dx][objet.posY+dy]==false)
 		{
 			return(true);
 		}
-
-
 		return(true);
-
 	}
-
 	Grille.prototype.majDessinObjet = function(objet,dx,dy){
-
 		gr.ctx.clearRect(objet.posX*gr.dX,objet.posY*gr.dY,gr.dX+1,gr.dY+1);
 		objet.posX=objet.posX+dx;
 		objet.posY=objet.posY+dy;
 		if(this.tab[objet.posX][objet.posY]==false){
-
 			this.tab[objet.posX][objet.posY]=true;
 			this.nbCur=this.nbCur+1;
 		}
 		
-
 		objet.dessin(this.ctx,this.dX,this.dY);
-
 	}
-
 	Grille.prototype.stopObjets = function() {
-
 		rbt1.eveille=false;
 		rbt2.eveille=false;
 		rbt3.eveille=false;
 	}
   
-
-
-
-
-
-
-
-
-
-
   // -------------------------------------------------------
   // Méthodes de l'objet
-
 	function Robot(x,y,vitesse,couleur){
-
 		this.posX=x;
 		this.posY=y;
 		this.temps=vitesse;
 		this.couleur=couleur;
 		this.timeID=0;
 		this.eveille=false;
-
 	}
-
 	Robot.prototype.dessin= function(ctx,dx,dy){
-
 		ctx.beginPath();
 		ctx.lineWidth="2";
 		ctx.fillStyle=this.couleur;
 		ctx.arc(dy*this.posX+dx/2,dx*this.posY+dy/2,dx/2-1,0,2*Math.PI);
 		ctx.fill();
-
 	}
-
 	Robot.prototype.perception= function() {
-
-
-
-		if(gr.nbCur>=144){
-
+		if(gr.nbCur>=gr.nbC){
 			gr.stopObjets();
 		}
-
-
 		var tabMvt=new Array();
-
 		if(gr.mvtAdmis(this,1,0)){
-
 			tabMvt.push([1,0]);
-
 		}
 		if(gr.mvtAdmis(this,-1,0)){
 			tabMvt.push([-1,0]);
 		}
-
 		if(gr.mvtAdmis(this,0,1)){
 			tabMvt.push([0,1]);
 		}
-
 		if(gr.mvtAdmis(this,0,-1)){
 			tabMvt.push([0,-1]);
 		}
 		
 		setTimeout(this.reflexion.bind(this,tabMvt),this.temps);
 	}
-
 	Robot.prototype.reflexion= function(tabMvt){
 	
 		var act=tabMvt[Math.floor(Math.random()*tabMvt.length)];
-
 		this.action(act);
 	}
-
-
 	Robot.prototype.action= function(act){
-
 		
 		
-
 		if(this.eveille==true){
 			gr.majDessinObjet(this,act[0],act[1]);
 			setTimeout(this.perception.bind(this),this.temps);
@@ -217,16 +154,10 @@
 			gr.majDessinObjet(this,0,0);
 		}
 	}
-
 	Robot.prototype.reveille= function(){
 		this.eveille=true;
-
 		this.perception();
-
-
-
 	}
-
   // -------------------------------------------------------
   // scène globale
   var gr = new Grille(12,12,'mon_canvas');
@@ -240,8 +171,6 @@
   rbt1.reveille();
   rbt2.reveille();
   rbt3.reveille();
-
-  getElementByTagName(style).addEventListener('click',stopObjets);
-
+  document.getElementById('stop_clic').addEventListener('click',gr.stopObjets);
 </script>
 </html>
