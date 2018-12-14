@@ -176,7 +176,7 @@
 			}
 
 			gr.majDessinObjet(this,act[0],act[1]);
-			setTimeout(this.perception.bind(this),this.temps);
+			setTimeout(this.perception.bind(this),this.temps+50);
 		}
 
 
@@ -188,7 +188,7 @@
 
 	Robot.prototype.reveille= function(){
 		this.eveille=true;
-		this.perception();
+		setTimeout(this.perception.bind(this),this.temps);
 	}
 
 
@@ -197,8 +197,8 @@
 
   var gr = new Grille(12,12,'mon_canvas');
   var rbt1 = new Robot(4,4,0.1,'black');
-  var rbt2 = new Robot(11,11,0.03,'red');
-  var rbt3 = new Robot(5,10,0.05,'blue');
+  var rbt2 = new Robot(11,11,1,'red');
+  var rbt3 = new Robot(5,10,1,'blue');
   gr.ajoutObjet(rbt1);
   gr.ajoutObjet(rbt2);
   gr.ajoutObjet(rbt3);
