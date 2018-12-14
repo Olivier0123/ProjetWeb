@@ -109,8 +109,10 @@
 
 	Grille.prototype.majDessinObjet = function(objet,dx,dy){
 
+		gr.ctx.clearRect(objet.posX*gr.dX,objet.posY*gr.dY,gr.dX+1,gr.dY+1);
 		objet.posX=objet.posX+dx;
 		objet.posY=objet.posY+dy;
+
 		objet.dessin(this.ctx,this.dX,this.dY);
 
 	}
@@ -151,7 +153,7 @@
 		ctx.beginPath();
 		ctx.lineWidth="2";
 		ctx.fillStyle=this.couleur;
-		ctx.arc(dy*this.posX+dx/2,dx*this.posY+dy/2,dx/2,0,2*Math.PI);
+		ctx.arc(dy*this.posX+dx/2,dx*this.posY+dy/2,dx/2-1,0,2*Math.PI);
 		ctx.fill();
 
 	}
